@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="../static/css/styles.css"/>
+    </head>
+<body>
+    <form action={{ url_for('register') }} method="post">
+        <label for="username">Username: </label><br>
+        <input type="text" id="username" name="username"><br><br>
+        <label for="password">Password: </label><br>
+        <input type="password" id="password" name="password"><br><br>
+        <label for="password">Retype password: </label><br>
+        <input type="password" id="password_retyped" name="password_retyped"><br><br>
+        <div id="info" class="info"> </div>
+        <p>Your password should contain:</p>
+        <p id="length" class="infoRed">- At least 10 characters</p>
+        <p id="upperCase" class="infoRed">- At least one uppercase letter</p>
+        <p id="lowerCase" class="infoRed">- At least one lowercase letter</p>
+        <p id="numbers" class="infoRed">- At least one number</p>
+        <p id="specialChar" class="infoRed">- At least one special character</p>
+        <input type="submit" value="Sign up" id = "submitBtn">
+    </form>
+    
+
+    <br>
+    <a href="/"><button>Sign in</button></a>
+
+    <script src="../static/js/passwordinfo.js"></script>
+
+</body>
+</html>

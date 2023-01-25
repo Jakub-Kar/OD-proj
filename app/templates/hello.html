@@ -1,0 +1,58 @@
+<html>
+<body>
+<h1>Hello {{ username }}!</h1>
+
+<form action={{ url_for('render') }} method="post">
+  <label for="markdown">Input some markdown:</label><br>
+  <textarea id="markdown" name="markdown" rows="20" cols="100"></textarea>
+    <br>
+    <label for="encryption_password">Encryption Password: </label>
+    <input type="password" id="encryption_password" name="encryption_password"><br>
+    <br>
+    <label for="rewrite_encryption_password">Rewrite Encryption Password: </label>
+    <input type="password" id="rewrite_encryption_password" name="rewrite_encryption_password"><br>
+  <br>
+    <input type="checkbox" name="Encrypt" value=1>Encrypt Note<br>
+    <input type="checkbox" name="Public" value=1>Make Public<br>
+  <input type="submit" value="Submit">
+    <label for="decryption_password">Decryption Password: </label>
+    <input type="password" id="decryption_password" name="decryption_password"><br>
+</form>
+
+{% if notes|length > 0 %}
+<h1> Your notes: </h1>
+<ul>
+{% for note in notes %}
+  <li><a href="{{ url_for('render') }}/{{note.0}}"> Note {{ loop.index }}</a></li>
+{% endfor %}
+</ul>
+
+{% endif %}
+
+{% if encrypted_notes|length > 0 %}
+<h1> Encrypted notes: </h1>
+<ul>
+{% for note in encrypted_notes %}
+  <li><a href="{{ url_for('render') }}/{{note.0}}"> Note {{ loop.index }}</a></li>
+{% endfor %}
+</ul>
+
+{% endif %}
+
+
+{% if shared_notes|length > 0 %}
+<h1> Public notes: </h1>
+<ul>
+{% for note in shared_notes %}
+  <li><a href="{{ url_for('render') }}/{{note.0}}"> Note {{ loop.index }}</a></li>
+{% endfor %}
+</ul>
+
+{% endif %}
+
+
+<form action={{ url_for('logout') }}>
+  <input type="submit" value="Log out" />
+</form>
+</body>
+</html>
