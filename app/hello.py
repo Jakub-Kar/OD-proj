@@ -239,7 +239,7 @@ def render():
     if encrypt_flag == 1:
         if checkpasswordrequirements(password):
             if password == password_rep:
-                str = ""            #najgłupsza rzecz jaką widziałem do tej pory w pythonie
+                str = ""            #bardzo dziwne zachowanie str
                 str = rendered
                 rendered = encode(str, password)
             else:
