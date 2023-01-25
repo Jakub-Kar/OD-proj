@@ -12,8 +12,18 @@ from datetime import datetime, timedelta
 from passlib.hash import sha256_crypt
 import sqlite3
 from time import sleep
+from flask_sslify import SSLify
+
 
 app = Flask(__name__)
+#sslify = SSLify(app)
+
+@app.after_request
+def after_request(response):
+    response.headers["Content-Security-Policy"] = "default-src 'self'"
+    response.headers["Server"] = 'Flask-Server'
+    return response
+
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -138,8 +148,8 @@ def login():
     if request.method == "GET":
         return render_template("index.html")
     if request.method == "POST":
-        username = request.form.get("username")
-        password = request.form.get("password")
+        username = bleach.clean(request.form.get("username"))
+        password = bleach.clean(request.form.get("password"))
         user = user_loader(username)
         sleep(2)
         if user is None:
@@ -203,11 +213,11 @@ def render():
     md = bleach.clean(request.form.get("markdown", ""), tags=allowed_tags, attributes=allowed_atributes)
     rendered = markdown.markdown(md)
     username = current_user.id
-    encrypt_flag = request.form.get("Encrypt")
-    public_flag = request.form.get("Public")
-    password = request.form.get("encryption_password")
-    password_rep = request.form.get("rewrite_encryption_password")
-    tmp = request.form.get("decryption_password")
+    encrypt_flag = bleach.clean(request.form.get("Encrypt"))
+    public_flag = bleach.clean(request.form.get("Public"))
+    password = bleach.clean(request.form.get("encryption_password"))
+    password_rep = bleach.clean(request.form.get("rewrite_encryption_password"))
+    tmp = bleach.clean(request.form.get("decryption_password"))
 
     if tmp != "":
         global key
@@ -259,7 +269,7 @@ def render_old(rendered_id):
     db = sqlite3.connect(DATABASE)
     sql = db.cursor()
     sql.execute(f"SELECT username, note, is_public, is_encrypted FROM notes WHERE id = {rendered_id}")
-
+    sleep(1)
     try:
         username, rendered, is_public, is_encrypted = sql.fetchone()
         print(username, rendered, is_public, is_encrypted)
